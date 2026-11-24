@@ -1,4 +1,5 @@
-const COLORS = ["#ff3b5c","#ff9f1c","#2ec4b6","#3a86ff","#8338ec","#ff5fa2"];
+const COLORS = ["#c8102e","#157347","#d99100","#a50d27","#1f8f5b","#e07b00"];
+const SNOW = ["#8ec5ff","#b5d8ff","#ffd36e","#cfe8ff"];
 const EMOJI = ["🎁","🎄","⛄","🦌","⭐","🍪","🔔"];
 const LIVE = !!CONFIG.API_URL;
 const $ = id => document.getElementById(id);
@@ -52,7 +53,7 @@ if(CONFIG.FORM_URL) $("formlink").href = CONFIG.FORM_URL; else $("formlink").onc
 if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
   for(let i = 0; i < 22; i++){
     const f = el("div", "flake", "❄"); f.style.left = Math.random() * 100 + "vw"; f.style.fontSize = (12 + Math.random() * 16) + "px";
-    f.style.color = COLORS[i % COLORS.length]; f.style.animationDuration = (9 + Math.random() * 10) + "s"; f.style.animationDelay = (-Math.random() * 15) + "s";
+    f.style.color = SNOW[i % SNOW.length]; f.style.animationDuration = (9 + Math.random() * 10) + "s"; f.style.animationDelay = (-Math.random() * 15) + "s";
     document.body.appendChild(f);
   }
 }
