@@ -28,8 +28,7 @@ function render(){
     });
     const row = el("div", "row");
     const cp = el("button", "mini", "📋 Copy"); cp.onclick = () => navigator.clipboard.writeText(letterText(l)).then(() => toast("Letter copied!"));
-    const wa = el("button", "mini", "💬 WhatsApp"); wa.onclick = () => window.open("https://wa.me/?text=" + encodeURIComponent(letterText(l)), "_blank");
-    row.append(cp, wa); c.appendChild(row); list.appendChild(c);
+    row.append(cp); c.appendChild(row); list.appendChild(c);
   });
 }
 
