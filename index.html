@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dear Santa 🎅 Secret Santa Wishes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🎅 Dear Santa… 🎄</h1>
+  <p id="event">Secret Santa</p>
+  <p class="sub">Write your wish letter and peek at everyone else’s!</p>
+</header>
+
+<main>
+  <section class="panel cta">
+    <h2>✍️ Write your letter</h2>
+    <p>Sign in with your Microsoft account so your letter is saved under <b>your own name</b>. Writing again updates your earlier letter.</p>
+    <a id="formlink" class="btn" href="#" target="_blank" rel="noopener">Write to Santa 🎅</a>
+  </section>
+
+  <div class="bar">
+    <h2>🎁 All wishes (<span id="count">0</span>)</h2>
+    <input id="q" type="search" placeholder="🔍 Search a name or wish">
+  </div>
+  <p id="status" class="status"></p>
+  <div id="list" class="grid"></div>
+</main>
+
+<footer>Made with ❤️ for our Secret Santa · Merry Christmas! 🎄</footer>
+<div id="toast"></div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+:root{--red:#ff3b5c;--orange:#ff9f1c;--yellow:#ffd93d;--green:#2ec4b6;--blue:#3a86ff;--purple:#8338ec;--pink:#ff5fa2;--ink:#2a1f4d;--muted:#6b5f8f}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;line-height:1.5;
+  background:linear-gradient(135deg,#fff1f5 0%,#fff9e0 35%,#e6fbf7 70%,#eef0ff 100%) fixed}
+header{text-align:center;padding:44px 16px 30px;color:#fff;
+  background:linear-gradient(120deg,var(--red),var(--orange),var(--pink),var(--purple),var(--blue));
+  border-bottom:8px dashed var(--yellow);border-radius:0 0 40px 40px;box-shadow:0 8px 24px rgba(131,56,236,.35)}
+h1{margin:0;font-size:clamp(2.1rem,7vw,3.6rem);text-shadow:3px 3px 0 rgba(0,0,0,.18)}
+header p{margin:6px 0 0}
+#event{font-weight:bold;font-size:1.2rem;letter-spacing:.08em;text-transform:uppercase}
+.sub{opacity:.95}
+main{max-width:1000px;margin:0 auto;padding:22px 16px}
+.panel{background:#fff;border-radius:22px;padding:24px;border:4px solid transparent;
+  background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,var(--red),var(--yellow),var(--green),var(--blue),var(--purple)) border-box;
+  box-shadow:0 10px 30px rgba(58,134,255,.2)}
+h2{margin:0 0 14px;color:var(--purple)}
+form{display:grid;gap:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+label{font-weight:bold;display:block}
+small{color:var(--muted);font-weight:normal}
+input,textarea{width:100%;margin-top:5px;padding:11px 13px;border:2px solid #e3dcff;border-radius:12px;background:#fdfcff;color:var(--ink);font:inherit}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(58,134,255,.2)}
+button{font:inherit;font-weight:bold;cursor:pointer;border:0;border-radius:14px;padding:13px 20px;color:#fff;
+  background:linear-gradient(120deg,var(--red),var(--orange));box-shadow:0 5px 0 #c42a45;transition:transform .1s}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #c42a45}
+button:disabled{opacity:.6}
+button.mini{padding:6px 12px;font-size:.85rem;border-radius:10px;background:var(--c);box-shadow:none}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:30px 0 6px}
+.bar h2{margin:0;color:var(--green)}
+.bar input{width:min(100%,280px);margin:0;border-radius:999px}
+.status{margin:0 0 14px;color:var(--muted);font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:18px}
+.card{background:#fff;border-radius:20px;padding:20px;border-top:12px solid var(--c);position:relative;
+  box-shadow:0 8px 20px color-mix(in srgb,var(--c) 30%,transparent);transition:transform .2s}
+.card:hover{transform:translateY(-4px) rotate(-.6deg)}
+.card .emo{position:absolute;top:-4px;right:12px;font-size:2rem}
+.card h3{margin:0;color:var(--c);font-size:1.3rem}
+.sal{margin:0 0 8px;font-style:italic;color:var(--muted)}
+.wish{white-space:pre-wrap;margin:0 0 10px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--c) 12%,#fff);font-weight:bold}
+.tag{margin:4px 0;font-size:.92rem}
+.tag b{color:var(--c)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+footer{text-align:center;color:var(--muted);padding:28px 16px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--purple);color:#fff;padding:11px 20px;border-radius:999px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+.flake{position:fixed;top:-24px;pointer-events:none;z-index:-1;opacity:.8;animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(108vh) rotate(360deg)}}
+.cta{text-align:center}
+.cta p{max-width:520px;margin:0 auto 16px;color:var(--muted)}
+.btn{display:inline-block;text-decoration:none;font-weight:bold;color:#fff;padding:14px 26px;border-radius:14px;font-size:1.1rem;
+  background:linear-gradient(120deg,var(--red),var(--orange));box-shadow:0 5px 0 #c42a45}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #c42a45}
