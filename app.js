@@ -20,16 +20,22 @@ function render(){
   if(!shown.length){ list.appendChild(el("div", "empty", letters.length ? "No matching letters 🔍" : "No letters yet. Be the first to write to Santa! ✨")); return; }
   shown.slice().reverse().forEach((l, i) => {
     const c = el("article", "card"); c.style.setProperty("--c", COLORS[i % COLORS.length]);
-    c.appendChild(el("span", "emo", EMOJI[i % EMOJI.length]));
-    c.appendChild(el("h3", "", l.name));
-    c.appendChild(el("p", "sal", "Dear Santa, I wish for…"));
-    c.appendChild(el("p", "wish", l.wish));
+    const head = el("div", "head"); head.tabIndex = 0; head.setAttribute("role", "button");
+    head.appendChild(el("span", "emo", EMOJI[i % EMOJI.length]));
+    head.appendChild(el("h3", "", l.name));
+    head.appendChild(el("p", "hint", "👀 Hover or tap to see the wish"));
+    const toggle = () => { const was = c.classList.contains("open"); document.querySelectorAll(".card.open").forEach(x => x.classList.remove("open")); if(!was) c.classList.add("open"); };
+    head.onclick = toggle; head.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); } };
+    const d = el("div", "details");
+    d.appendChild(el("p", "sal", "Dear Santa, I wish for…"));
+    d.appendChild(el("p", "wish", l.wish));
     [["About", l.about], ["Likes", l.likes], ["Avoid", l.avoid]].forEach(([k, v]) => {
-      if(!v) return; const p = el("p", "tag"); p.appendChild(el("b", "", k + ": ")); p.appendChild(document.createTextNode(v)); c.appendChild(p);
+      if(!v) return; const p = el("p", "tag"); p.appendChild(el("b", "", k + ": ")); p.appendChild(document.createTextNode(v)); d.appendChild(p);
     });
     const row = el("div", "row");
     const cp = el("button", "mini", "📋 Copy"); cp.onclick = () => navigator.clipboard.writeText(letterText(l)).then(() => toast("Letter copied!"));
-    row.append(cp); c.appendChild(row); list.appendChild(c);
+    row.append(cp); d.appendChild(row);
+    c.append(head, d); list.appendChild(c);
   });
 }
 
@@ -47,6 +53,7 @@ async function load(){
 }
 
 $("q").addEventListener("input", render);
+document.addEventListener("click", e => { if(!e.target.closest(".card")) document.querySelectorAll(".card.open").forEach(x => x.classList.remove("open")); });
 $("event").textContent = CONFIG.EVENT_NAME;
 if(CONFIG.FORM_URL) $("formlink").href = CONFIG.FORM_URL; else $("formlink").onclick = e => { e.preventDefault(); toast("Add FORM_URL in config.js"); };
 
