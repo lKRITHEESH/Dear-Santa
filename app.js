@@ -4,6 +4,8 @@ const EMOJI = ["🎁","🎄","⛄","🦌","⭐","🍪","🔔"];
 const LIVE = !!CONFIG.API_URL;
 const $ = id => document.getElementById(id);
 let letters = [];
+let loaded = false;
+const CACHE_KEY = "santa-wishes-cache";
 
 function el(tag, cls, text){ const e = document.createElement(tag); if(cls) e.className = cls; if(text !== undefined) e.textContent = text; return e; }
 function toast(m){ const t = $("toast"); t.textContent = m; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 2400); }
@@ -17,6 +19,7 @@ function render(){
   const shown = letters.filter(l => !q || [l.name, l.about, l.wish, l.likes].join(" ").toLowerCase().includes(q));
   $("count").textContent = letters.length;
   const list = $("list"); list.textContent = "";
+  if(!shown.length && !loaded){ list.appendChild(el("div", "empty", "⏳ Loading wishes… the first load can take a few seconds")); return; }
   if(!shown.length){ list.appendChild(el("div", "empty", letters.length ? "No matching letters 🔍" : "No letters yet. Be the first to write to Santa! ✨")); return; }
   shown.slice().reverse().forEach((l, i) => {
     const c = el("article", "card"); c.style.setProperty("--c", COLORS[i % COLORS.length]);
@@ -43,10 +46,14 @@ async function load(){
   if(LIVE){
     try {
       const r = await fetch(CONFIG.API_URL); const d = await r.json();
-      if(d.ok){ letters = d.wishes; $("status").textContent = "🟢 Live · updates every " + CONFIG.REFRESH_SECONDS + " seconds"; }
-    } catch(e){ $("status").textContent = "⚠️ Could not reach the server. Retrying…"; }
+      if(d.ok){
+        letters = d.wishes; loaded = true;
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(letters)); } catch(e){}
+        $("status").textContent = "🟢 Live · updates every " + CONFIG.REFRESH_SECONDS + " seconds";
+      }
+    } catch(e){ $("status").textContent = loaded ? "⚠️ Could not refresh. Showing saved wishes." : "⚠️ Could not reach the server. Retrying…"; }
   } else {
-    letters = [];
+    letters = []; loaded = true;
     $("status").textContent = "🧪 Add your API_URL in config.js so everyone can see each other’s wishes.";
   }
   render();
@@ -65,5 +72,9 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
   }
 }
 
+if(LIVE){
+  try { const c = JSON.parse(localStorage.getItem(CACHE_KEY)); if(Array.isArray(c) && c.length){ letters = c; loaded = true; $("status").textContent = "⚡ Showing saved wishes · refreshing…"; } } catch(e){}
+}
+render();
 load();
-if(LIVE) setInterval(load, CONFIG.REFRESH_SECONDS * 1000);
+if(LIVE) setInterval(() => { if(!document.hidden) load(); }, CONFIG.REFRESH_SECONDS * 1000);
