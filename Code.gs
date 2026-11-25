@@ -15,13 +15,18 @@ function json_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
-// Everyone's letters (emails are never sent; rows with hidden = YES are skipped)
+// Everyone's letters (emails are never sent; rows with hidden = YES are skipped). Cached for 45 seconds for speed.
 function doGet() {
+  const cache = CacheService.getScriptCache();
+  const hit = cache.get("wishes");
+  if (hit) return ContentService.createTextOutput(hit).setMimeType(ContentService.MimeType.JSON);
   const rows = sheet_().getDataRange().getValues().slice(1);
   const wishes = rows
-    .filter(r => r[1] && String(r[6]).toUpperCase() !== "YES")
-    .map(r => ({ name: r[1], about: r[2], wish: r[3], likes: r[4], avoid: r[5] }));
-  return json_({ ok: true, wishes: wishes });
+    .filter(r => (r[1] || r[7]) && r[3] && String(r[6]).toUpperCase() !== "YES")
+    .map(r => ({ name: r[1] || nameFromEmail_(String(r[7])), about: r[2], wish: r[3], likes: r[4], avoid: r[5] }));
+  const out = JSON.stringify({ ok: true, wishes: wishes });
+  try { cache.put("wishes", out, 45); } catch (e) {}
+  return ContentService.createTextOutput(out).setMimeType(ContentService.MimeType.JSON);
 }
 
 function nameFromEmail_(email) {
@@ -43,6 +48,7 @@ function doPost(e) {
     const name = clean(d.name, 40) || nameFromEmail_(email);
     const wish = clean(d.wish, 600);
     if (!email || !wish) return json_({ ok: false, error: "missing fields" });
+    CacheService.getScriptCache().remove("wishes");
     const sh = sheet_();
     const row = [new Date(), name, clean(d.about, 400), wish, clean(d.likes, 200), clean(d.avoid, 200)];
     const data = sh.getDataRange().getValues();
